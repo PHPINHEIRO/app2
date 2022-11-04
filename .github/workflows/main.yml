@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Publicando no azure web app
-        uses: Azure/webapp-deploy@v2
+        uses: azure/webapps-deploy@v2
         with:
           app-name: gbactions-ci-cd-app2
           publish-profile: ${{ secrets.WEBAPP_PROFILE }}
