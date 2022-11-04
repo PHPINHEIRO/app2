@@ -28,3 +28,13 @@ jobs:
             pphenrique/app2:latest
             pphenrique/app2:${{env.tagVersion}}
           push: true
+  CD:
+    needs: [CI]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Publicando no azure web app
+        uses: Azure/webapp-deploy@v2
+        with:
+          app-name: gbactions-ci-cd-app2
+          publish-profile: ${{ secrets.WEBAPP_PROFILE }}
+          image: pphenrique/app2:${{env.tagVersion}}
