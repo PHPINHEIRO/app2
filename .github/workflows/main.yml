@@ -19,8 +19,12 @@ jobs:
       
       - name: gerando image do projeto
         uses: docker/build-push-action@v3
+        env:
+          tagVersion: "${{github.run_number}}"
         with:
           context: .
           file: ./Dockerfile
-          tags: pphenrique/app2:latest
+          tags: |
+            pphenrique/app2:latest
+            pphenrique/app2:${{env.tagVersion}}
           push: true
