@@ -5,6 +5,12 @@ terraform {
       version = "=3.30.0"
     }
   }
+  backend "azurerm" {
+    resource_group_name  = "terraform-state"
+    storage_account_name = "terraformssctatesstorage"
+    container_name       = "devtfstate"
+    key                  = "dev.terraform.tfstate"
+  }
 }
 
 # Configure the Microsoft Azure Provider
