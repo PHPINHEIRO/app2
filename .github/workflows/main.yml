@@ -57,6 +57,9 @@ jobs:
       name: dev
 
     steps:
+
+        - name: checkout repo
+          uses: actions/checkout@v3
         
         - name: Terraform
           uses: hashicorp/setup-terraform@v2
