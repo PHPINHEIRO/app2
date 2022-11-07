@@ -57,6 +57,9 @@ jobs:
       name: dev
 
     steps:
+        
+        - name: Path
+          run: echo ${{ github.workspace }}
         - name: Terraform
           uses: hashicorp/setup-terraform@v2
           with:
