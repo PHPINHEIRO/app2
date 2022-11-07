@@ -3,9 +3,11 @@ name: CI-CD
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
-  CI:
+
+  Build-Docker-Image:
     runs-on: ubuntu-20.04
     steps:
       - name: checkout repo
@@ -28,13 +30,53 @@ jobs:
             pphenrique/app2:latest
             pphenrique/app2:${{env.tagVersion}}
           push: true
-  CD:
-    needs: [CI]
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Publicando no azure web app
-        uses: azure/webapps-deploy@v2
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
         with:
-          app-name: gbactions-ci-cd-app2
-          publish-profile: ${{ secrets.WEBAPP_PROFILE }}
-          images: pphenrique/app2:latest
+          name: app
+          path: ${{ github.workspace }}//infra
+
+  Azure-web-app:
+    name: Criando infra no Azure
+
+    needs: [Build-Docker-Image]
+    runs-on: ubuntu-20.04
+
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/infra/terraform
+    env:
+      ARM_CLIENT_ID: ${{ secrets.TF_ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.TF_ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.TF_ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.TF_ARM_TENNANT_ID }}
+ 
+    
+    environment:
+      name: dev
+
+    steps:
+        - name: Terraform
+          uses: hashicorp/setup-terraform@v2
+          with:
+            terraform_wrapper: false
+
+        - name: Terraform fmt
+          id: fmt
+          run: terraform fmt -check
+
+        - name: Terraform Init
+          id: init
+          run: terraform init
+
+        - name: Terraform Validate
+          id: validate
+          run: terraform validate -no-color
+
+        - name: Terraform Plan
+          id: plan
+          run: terraform plan -no-color -lock=false
+
+        - name: Terraform Apply
+          run: terraform apply -auto-approve  -lock=false
