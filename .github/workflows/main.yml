@@ -45,7 +45,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ${{ github.workspace }}/infra/terraform
+        working-directory: ${{ github.workspace }}//infra/terraform
     env:
       ARM_CLIENT_ID: ${{ secrets.TF_ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.TF_ARM_CLIENT_SECRET }}
