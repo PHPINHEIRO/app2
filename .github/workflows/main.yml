@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app
-          path: ${{ github.workspace }}//infra
+          path: ${{ github.workspace }}//infra/terraform
 
   Azure-web-app:
     name: Criando infra no Azure
@@ -58,8 +58,6 @@ jobs:
 
     steps:
         
-        - name: Path
-          run: echo ${{ github.workspace }}
         - name: Terraform
           uses: hashicorp/setup-terraform@v2
           with:
