@@ -60,8 +60,8 @@ jobs:
         
         - name: Path
           run: |
-            ls ${{ github.workspace }}
-            tree ${{ github.workspace }}
+            echo ls ${{ github.workspace }}
+            echo tree ${{ github.workspace }}
         - name: Terraform
           uses: hashicorp/setup-terraform@v2
           with:
