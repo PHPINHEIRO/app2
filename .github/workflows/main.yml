@@ -37,8 +37,7 @@ jobs:
           name: app
           path: ${{ github.workspace }}//infra/terraform
 
-  Azure-web-app:
-    name: Criando infra no Azure
+  Create-web-app-azure:
 
     needs: [Build-Docker-Image]
     runs-on: ubuntu-20.04
@@ -84,3 +83,16 @@ jobs:
 
         - name: Terraform Apply
           run: terraform apply -auto-approve  -lock=false
+  CD:
+    needs: [
+      Build-Docker-Image,
+      Create-web-app-azure
+    ]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Publicando no azure web app
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: app2-web-app
+          publish-profile: ${{ secrets.WEBAPP_PROFILE }}
+          images: pphenrique/app2:latest

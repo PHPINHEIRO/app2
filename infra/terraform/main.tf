@@ -39,9 +39,5 @@ resource "azurerm_linux_web_app" "tf_web_app" {
 
   site_config {
     always_on = false
-    application_stack {
-      docker_image     = "pphenrique/app2"
-      docker_image_tag = "latest"
-    }
   }
 }
